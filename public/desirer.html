@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/output-style.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div class="w-full flex items-center h-screen justify-center flex-wrap mt-4">
+        <div class=" mb-12 px-4">
+          <div class="relative flex flex-col break-words w-full mb-6 shadow-lg rounded bg-white">
+            <!-- header -->
+            <div class="rounded-t mb-0 px-4 py-3 border-0">
+              <div class="flex flex-wrap items-center">
+                  <h3 class="font-bold text-3xl uppercase text-purple-500 ">
+                    CALCULER MOYENNE bac - avec note desirée 
+                  </h3>
+              </div>
+            </div>
+            <div class="block w-full overflow-x-auto">
+              <table class=" w-full bg-transparent border-collapse">
+                <thead class="bg-purple-500 text-white font-bold text-base w-full">
+                  <tr>
+                    <th class="pl-3 min-w-35 border-r-2 border-solid border-white py-3 text-left">
+                      Description
+                    </th>
+                    <th class="pl-3 min-w-35 border-r-2 border-solid border-white py-3 text-left">
+                      Note
+                    </th>
+                    <th class="pl-3 min-w-15 border-r-2 border-solid border-white py-3 text-left">
+                      Coefficient
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-gray-50">
+                  <tr>
+                    <td class="text-sm font-semibold pl-3 border-l-0 border-r-0 py-4">
+                        Contrôle continu - Premier Semestre
+                    </td>
+                    <td class="border-l-0 border-r-0 ">
+                      <input type="number" id="1" min="0" max="20" value="" class="desires w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0">
+                    </td>
+                    <td class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold">
+                        0.5
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold">
+                        Contrôle continu - Deuxième Semestre
+                    </td>
+                    <td class="border-l-0 border-r-0 ">
+                        <input type="number" id="2" min="0" max="20" value="" class="desires w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0">
+                      </td>
+                    <td class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold">
+                        0.5
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold">
+                        Examen Régional du Bac
+                    </td>
+                    <td class="border-l-0 border-r-0 ">
+                        <input type="number" id="3" min="0" max="20" value="" class="desires w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0">
+                      </td>
+                    <td class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold">
+                        1
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold">
+                        Moyenne Souhaitée en Bac
+                    </td>
+                    <td class="border-l-0 border-r-0 ">
+                        <input type="number" id="4" min="0" max="20" value="" class="desires w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0">
+                      </td>
+                    <td class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold">
+                        / 20
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot class="bg-purple-500 text-white font-bold text-base w-full">
+                    <tr>
+                        <th class="pl-3 border-r-2 border-solid border-white py-3 text-left w-full">
+                            La Note qu'il faut en examen nationnal	
+                        </th>
+                        <th class="pl-3 py-3 text-left w-full" >
+                          <span class="result"></span>
+                        </th>
+                        <th class="pl-3 border-r-2 border-solid border-white py-3 text-left w-full">
+                            2
+                        </th>
+                      </tr>
+                </tfoot>
+              </table>
+            </div>
+            
+          </div>
+          <div class="flex items-center justify-between">
+            <a href="minimal.html" class="bg-white border-2 border-solid border-purple-500 text-purple-500 py-1.5 px-4 rounded-lg font-semibold transition ease-in duration-75 hover:bg-purple-500 hover:text-white">Précédent</a>
+            <a href="index.html" class="bg-white border-2 border-solid border-purple-500 text-purple-500 py-1.5 px-4 rounded-lg font-semibold transition ease-in duration-75 hover:bg-purple-500 hover:text-white">Suivant</a>
+          </div>
+        </div>
+      </div>
+
+
+      <script src="../src/script.js"></script>
+</body>
+</html>
