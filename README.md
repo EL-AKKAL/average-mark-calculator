@@ -13,7 +13,7 @@ the minimal mark needed in the national exam to succeed
 specify a note that you want to get at the end of the year , then calculate how much you need in the national exam to reach it.
 
 ### ADVANCED
-calculate all notes since the first quarter module until the final note , and the user can controle the number of modules per semestre , the coefficient and the last exams
+calculate all notes since the first quarter module until the final note ,while user can controle the number of modules per semestre , the coefficient and the last exams
 
 # technologies 
 -HTML , TAILWIND CSS , JAVASCRIPT
