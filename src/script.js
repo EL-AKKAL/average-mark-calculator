@@ -131,12 +131,21 @@ if (desirerList != null || desirerList != undefined) {
 
 // advanced.html-------------------------------------------------------------------------------------
 
-const appendChildrenFunction = (tableRow, td1, td2, td3, input1, input2) => {
+const appendChildrenFunction = (
+     tableRow,
+     td1,
+     td2,
+     td3,
+     input1,
+     input2,
+     input3
+) => {
      const tbody = document.querySelector(".tbody");
      tbody.appendChild(tableRow);
      tableRow.appendChild(td1);
      tableRow.appendChild(td2);
      tableRow.appendChild(td3);
+     td1.appendChild(input3);
      td2.appendChild(input1);
      td3.appendChild(input2);
      premiereList = document.querySelectorAll(".premiereNote");
@@ -162,13 +171,15 @@ const appendChildrenFunction2 = (
      td22,
      td32,
      input12,
-     input22
+     input22,
+     input32
 ) => {
      const tbody2 = document.querySelector(".tbody2");
      tbody2.appendChild(tableRow2);
      tableRow2.appendChild(td12);
      tableRow2.appendChild(td22);
      tableRow2.appendChild(td32);
+     td12.appendChild(input32);
      td22.appendChild(input12);
      td32.appendChild(input22);
      deuxiemeList = document.querySelectorAll(".deuxiemeNote");
@@ -189,7 +200,15 @@ const appendChildrenFunction2 = (
 };
 
 // add classes to all elements
-const addClassesFunction = (tableRow, td1, td2, td3, input1, input2) => {
+const addClassesFunction = (
+     tableRow,
+     td1,
+     td2,
+     td3,
+     input1,
+     input2,
+     input3
+) => {
      // declaring all classes
      const classes = [
           "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
@@ -197,6 +216,7 @@ const addClassesFunction = (tableRow, td1, td2, td3, input1, input2) => {
           "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
           "premiereNote w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
           "premiereCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
+          "module w-5/6 border border-solid border-gray-600 text-lg font-bold text-gray-600 px-2 py-0",
      ];
 
      // add classes
@@ -205,12 +225,21 @@ const addClassesFunction = (tableRow, td1, td2, td3, input1, input2) => {
      td3.className = classes[2];
      input1.className = classes[3];
      input2.className = classes[4];
+     input3.className = classes[5];
 
      // call to show elements function
-     appendChildrenFunction(tableRow, td1, td2, td3, input1, input2);
+     appendChildrenFunction(tableRow, td1, td2, td3, input1, input2, input3);
 };
 // add classes to all elements
-const addClassesFunction2 = (tableRow2, td12, td22, td32, input12, input22) => {
+const addClassesFunction2 = (
+     tableRow2,
+     td12,
+     td22,
+     td32,
+     input12,
+     input22,
+     input32
+) => {
      // declaring all classes
      const classes2 = [
           "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
@@ -218,6 +247,7 @@ const addClassesFunction2 = (tableRow2, td12, td22, td32, input12, input22) => {
           "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
           "deuxiemeNote w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
           "deuxiemeCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
+          "module w-5/6 border border-solid border-gray-600 text-lg font-bold text-gray-600 px-2 py-0",
      ];
 
      // add classes
@@ -226,9 +256,18 @@ const addClassesFunction2 = (tableRow2, td12, td22, td32, input12, input22) => {
      td32.className = classes2[2];
      input12.className = classes2[3];
      input22.className = classes2[4];
+     input32.className = classes2[5];
 
      // call to show elements function
-     appendChildrenFunction2(tableRow2, td12, td22, td32, input12, input22);
+     appendChildrenFunction2(
+          tableRow2,
+          td12,
+          td22,
+          td32,
+          input12,
+          input22,
+          input32
+     );
 };
 
 // create Module items function
@@ -238,7 +277,9 @@ const CreateNewModule = () => {
      const tableRow = document.createElement("tr");
      // first td with children
      const modulename = document.createElement("td");
-     modulename.innerHTML = "Note Module " + ids;
+     const moduleInput = document.createElement("input");
+     moduleInput.setAttribute("type", "text");
+     moduleInput.setAttribute("placeHolder", "Module name");
 
      // second td with children
      const note = document.createElement("td");
@@ -248,6 +289,7 @@ const CreateNewModule = () => {
      input.setAttribute("min", 0);
      input.setAttribute("max", 20);
      input.setAttribute("value", 0);
+     input.setAttribute("oninput", "PreventStringValue(this)");
 
      // third td with children
      const coefficient = document.createElement("td");
@@ -255,8 +297,9 @@ const CreateNewModule = () => {
      secondInput.setAttribute("type", "number");
      secondInput.setAttribute("id", ids);
      secondInput.setAttribute("min", 0);
-     secondInput.setAttribute("max", 10);
+     secondInput.setAttribute("max", 9);
      secondInput.setAttribute("value", 0);
+     secondInput.setAttribute("oninput", "PreventCoef(this)");
 
      ids++;
      addClassesFunction(
@@ -265,7 +308,8 @@ const CreateNewModule = () => {
           note,
           coefficient,
           input,
-          secondInput
+          secondInput,
+          moduleInput
      );
 };
 
@@ -275,7 +319,9 @@ const CreateNewModule2 = () => {
      const tableRow2 = document.createElement("tr");
      // first td with children
      const modulename2 = document.createElement("td");
-     modulename2.innerHTML = "Note Module " + ids2;
+     const moduleInput2 = document.createElement("input");
+     moduleInput2.setAttribute("type", "text");
+     moduleInput2.setAttribute("placeHolder", "Module name");
 
      // second td with children
      const note2 = document.createElement("td");
@@ -285,6 +331,7 @@ const CreateNewModule2 = () => {
      input2.setAttribute("min", 0);
      input2.setAttribute("max", 20);
      input2.setAttribute("value", 0);
+     input2.setAttribute("oninput", "PreventStringValue(this)");
 
      // third td with children
      const coefficient2 = document.createElement("td");
@@ -292,8 +339,9 @@ const CreateNewModule2 = () => {
      secondInput2.setAttribute("type", "number");
      secondInput2.setAttribute("id", ids2);
      secondInput2.setAttribute("min", 0);
-     secondInput2.setAttribute("max", 10);
+     secondInput2.setAttribute("max", 9);
      secondInput2.setAttribute("value", 0);
+     secondInput2.setAttribute("oninput", "PreventCoef(this)");
 
      ids2++;
      addClassesFunction2(
@@ -302,7 +350,8 @@ const CreateNewModule2 = () => {
           note2,
           coefficient2,
           input2,
-          secondInput2
+          secondInput2,
+          moduleInput2
      );
 };
 
@@ -373,7 +422,7 @@ const calculateNote2 = () => {
 // total note / advanced.html
 if (finalList != null || finalList != undefined) {
      finalList.forEach((item) => {
-          item.addEventListener("change", () => {
+          item.addEventListener("input", () => {
                // premiere semestre + deuxieme semestre
                controles =
                     (parseFloat(result[1].innerHTML) +
