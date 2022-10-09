@@ -1,24 +1,72 @@
+/*
+Notes to remember :
+     firstOrLast => it's a variable to check if we are currently working on the first semestre table or the second
+     fisrtOrLast is only needed in the advanced.html
+
+     initialiser :
+     after every load we initialise all the inputs of type text to "" and inputs of type number to 0
+
+     PreventStringValue :
+     this function works only on the marks inputs to prevent getting string or negative integers
+
+     PreventCoefValue :
+     this function works only on the coefficient inputs to prevent getting string or negative integers
+
+     decisionQuote : 
+     this function tells the user if he failed or passed
+
+     forceFailure :
+     this function automatically fail if any of the passed array elements has the value 0 =>
+     0 on one module means failure
+
+     DeleteModule :
+     this function is only for advanced.html
+     this function depends on the passed parameter which is a button , each button in the first table 
+     has the first-table class , so the function check if this class exists to target the wanted table, then
+     the function deletes the row that have the same id as the passed button parameter
+
+     CreateModuleConstant :
+     this function is only for advanced.html
+     this function create an entire row with its elements then call a methode to fill each element with its 
+     specific classes
+     the parameter is just an integeer which will be replaced by the current id depends on which table
+
+     appendChildrenFunction
+     this function is only for advanced.html
+     this function construct and nest the created elements to make a full new row ready to be used and shown
+
+     addClassesFunction
+     this function is only for advanced.html
+     this function only for adding classes to each element of the created row then 
+     it calls the appendChildrenFunction to finish the job
+
+     CreateNewModule
+     this function is only for advanced.html
+     this function checks which table we are working on ,then
+     it calls the CreateModuleConstant to create new list of elements then calls  addClassesFunction to add classes on
+     every element
+
+     calculateNote
+     this function is only for advanced.html
+     this function only calculate the final note of first 2 tables
+
+
+     last table calculations is directly made on the input event listener
+
+*/
+
 const initialiser = document.querySelectorAll("input");
 const indexList = document.querySelectorAll(".notes");
 const finalList = document.querySelectorAll(".final");
-var premiereList = document.querySelectorAll(".premiereNote");
-var deuxiemeList = document.querySelectorAll(".deuxiemeNote");
-var premiereCoef = document.querySelectorAll(".premiereCoef");
-var deuxiemeCoef = document.querySelectorAll(".deuxiemeCoef");
-const buttonAdd = document.querySelector("#add-module");
-const buttonAdd2 = document.querySelector("#add-module2");
 const minimalList = document.querySelectorAll(".minimals");
 const desirerList = document.querySelectorAll(".desires");
 const result = document.querySelectorAll(".result");
 const result2 = document.querySelectorAll(".result2");
 const decision = document.querySelector(".decision");
-const advancedNotes = document.querySelectorAll(".premiereNote");
-const body2 = document.querySelector(".tbody2");
 let controles = 0;
 let moyenne = 0;
 let ids = 2;
 let ids2 = 2;
-
 // initialiser les valeurs a 0-------------------------------------------------------------------------------------
 initialiser.forEach((element) => {
      element.type == "text" ? (element.value = "") : (element.value = "0");
@@ -27,25 +75,42 @@ initialiser.forEach((element) => {
 const PreventStringValue = (stringToCheck) => {
      if (!parseInt(stringToCheck.value) || stringToCheck.value > 20) {
           stringToCheck.value = 0;
-          stringToCheck.classList.remove("filled");
-     } else if (stringToCheck.value > 0) {
-          stringToCheck.classList.add("filled");
      }
 };
 const PreventCoef = (stringToCheck) => {
      if (!parseInt(stringToCheck.value) || stringToCheck.value > 9) {
           stringToCheck.value = 0;
-          stringToCheck.classList.remove("filled");
-     } else if (stringToCheck.value > 0) {
-          stringToCheck.classList.add("filled");
      }
+};
+const decisionQuote = (noteToCheck) => {
+     let textToShow = "";
+     if (noteToCheck < 10 || isNaN(noteToCheck)) {
+          textToShow = "Doublon";
+     } else if (noteToCheck < 12) {
+          textToShow = "Passable";
+     } else if (noteToCheck < 13) {
+          textToShow = "Assez bien";
+     } else if (noteToCheck < 16) {
+          textToShow = "bien";
+     }
+     return textToShow;
+};
+const forceFailure = (arrayToCheck) => {
+     for (let i = 0; i < arrayToCheck.length; i++) {
+          if (arrayToCheck[i].value == 0 || isNaN(arrayToCheck[i].value)) {
+               return "failed";
+          }
+     }
+     return "succeed";
 };
 // index.html-------------------------------------------------------------------------------------
 if (indexList != null || indexList != undefined) {
      indexList.forEach((item) => {
           item.addEventListener("input", () => {
-               const FilledInputs = document.querySelectorAll(".filled");
-               if (FilledInputs.length === 4) {
+               if (forceFailure(indexList) == "failed") {
+                    decision.innerHTML = "Doublon";
+                    result[0].innerHTML = "Vous Avez 0 sur un module";
+               } else {
                     // premiere semestre + deuxieme semestre
                     controles =
                          (parseFloat(indexList[0].value) +
@@ -58,20 +123,8 @@ if (indexList != null || indexList != undefined) {
                          controles * 0.25;
                     // affichage resultat
                     result[0].innerHTML = moyenne + " /20";
-
                     // affichage decision (pas obligatoire)
-                    if (moyenne < 10) {
-                         decision.innerHTML = "Doublon";
-                    } else if (moyenne < 12) {
-                         decision.innerHTML = "Passable";
-                    } else if (moyenne < 13) {
-                         decision.innerHTML = "Assez bien";
-                    } else if (moyenne < 16) {
-                         decision.innerHTML = "bien";
-                    }
-               } else {
-                    decision.innerHTML = "Doublon";
-                    result[0].innerHTML = "00 / 20";
+                    decision.innerHTML = decisionQuote(moyenne);
                }
           });
      });
@@ -81,9 +134,9 @@ if (indexList != null || indexList != undefined) {
 if (minimalList != null || minimalList != undefined) {
      minimalList.forEach((element) => {
           element.addEventListener("input", () => {
-               const FilledInputs = document.querySelectorAll(".filled");
-
-               if (FilledInputs.length === 3) {
+               if (forceFailure(minimalList) == "failed") {
+                    result[0].innerHTML = "Vous Avez 0 sur un Module";
+               } else {
                     // premiere semestre + deuxieme semestre
                     controles =
                          (parseFloat(minimalList[0].value) +
@@ -96,8 +149,13 @@ if (minimalList != null || minimalList != undefined) {
                                    (controles +
                                         parseFloat(minimalList[2].value))) /
                          0.5;
-                    result[0].innerHTML = moyenne + " /20";
-               } else result[0].innerHTML = "";
+                    if (moyenne < 20) {
+                         // affichage resultat
+                         result[0].innerHTML = moyenne + " /20";
+                    } else {
+                         result[0].innerHTML = "Pas Suffisant";
+                    }
+               }
           });
      });
 }
@@ -106,9 +164,9 @@ if (minimalList != null || minimalList != undefined) {
 if (desirerList != null || desirerList != undefined) {
      desirerList.forEach((element) => {
           element.addEventListener("input", () => {
-               const FilledInputs = document.querySelectorAll(".filled");
-
-               if (FilledInputs.length === 4) {
+               if (forceFailure(desirerList) == "failed") {
+                    result[0].innerHTML = "Vous Avez 0 sur un module";
+               } else {
                     // premiere semestre + deuxieme semestre
                     controles =
                          (parseFloat(desirerList[0].value) +
@@ -124,298 +182,194 @@ if (desirerList != null || desirerList != undefined) {
                     if (moyenne > 19)
                          result[0].innerHTML = "Impossible d'avoir cette Note";
                     else result[0].innerHTML = moyenne + " /20";
-               } else result[0].innerHTML = "";
+               }
           });
      });
 }
 
 // advanced.html-------------------------------------------------------------------------------------
+const DeleteModule = (e) => {
+     let targetRow = "";
+     e.target.classList.contains("first-table")
+          ? (targetRow = ".tbody tr")
+          : (targetRow = ".tbody2 tr");
+     const RowsCount = document.querySelectorAll(targetRow);
 
-const appendChildrenFunction = (
-     tableRow,
-     td1,
-     td2,
-     td3,
-     input1,
-     input2,
-     input3
-) => {
-     const tbody = document.querySelector(".tbody");
-     tbody.appendChild(tableRow);
-     tableRow.appendChild(td1);
-     tableRow.appendChild(td2);
-     tableRow.appendChild(td3);
-     td1.appendChild(input3);
-     td2.appendChild(input1);
-     td3.appendChild(input2);
-     premiereList = document.querySelectorAll(".premiereNote");
-
-     premiereList.forEach((element) => {
-          if (!element.classList.contains("active")) {
-               element.classList.add("active");
-               element.addEventListener("change", calculateNote);
-          }
-     });
-
-     premiereCoef.forEach((element) => {
-          if (!element.classList.contains("active")) {
-               element.classList.add("active");
-               element.addEventListener("change", calculateNote);
+     RowsCount.forEach((row) => {
+          if (row.id == e.target.id) {
+               row.remove();
           }
      });
 };
 
-const appendChildrenFunction2 = (
-     tableRow2,
-     td12,
-     td22,
-     td32,
-     input12,
-     input22,
-     input32
-) => {
-     const tbody2 = document.querySelector(".tbody2");
-     tbody2.appendChild(tableRow2);
-     tableRow2.appendChild(td12);
-     tableRow2.appendChild(td22);
-     tableRow2.appendChild(td32);
-     td12.appendChild(input32);
-     td22.appendChild(input12);
-     td32.appendChild(input22);
-     deuxiemeList = document.querySelectorAll(".deuxiemeNote");
-
-     deuxiemeList.forEach((element) => {
-          if (!element.classList.contains("active")) {
-               element.classList.add("active");
-               element.addEventListener("change", calculateNote2);
-          }
-     });
-
-     deuxiemeCoef.forEach((element) => {
-          if (!element.classList.contains("active")) {
-               element.classList.add("active");
-               element.addEventListener("change", calculateNote2);
-          }
-     });
+const CreateModuleConstant = (CurrentId) => {
+     // the table row
+     const tableRow = document.createElement("tr");
+     tableRow.setAttribute("id", CurrentId);
+     // -------------------------------------------------------
+     // first td with children
+     const moduleNameTd = document.createElement("td");
+     const moduleNameInput = document.createElement("input");
+     moduleNameInput.setAttribute("type", "text");
+     moduleNameInput.setAttribute("placeHolder", "Module name");
+     // -------------------------------------------------------
+     // second td with children
+     const noteTd = document.createElement("td");
+     const noteInput = document.createElement("input");
+     noteInput.setAttribute("type", "number");
+     noteInput.setAttribute("id", CurrentId);
+     noteInput.setAttribute("min", 0);
+     noteInput.setAttribute("max", 20);
+     noteInput.setAttribute("value", 0);
+     noteInput.setAttribute("oninput", "PreventStringValue(this)");
+     // ---------------------------------------------------------
+     // third td with children
+     const coefficientTd = document.createElement("td");
+     // -------------input
+     const coefficientInput = document.createElement("input");
+     coefficientInput.setAttribute("type", "number");
+     coefficientInput.setAttribute("id", CurrentId);
+     coefficientInput.setAttribute("min", 0);
+     coefficientInput.setAttribute("max", 9);
+     coefficientInput.setAttribute("value", 0);
+     coefficientInput.setAttribute("oninput", "PreventCoef(this)");
+     // ------------button
+     const buttonDelete = document.createElement("button");
+     buttonDelete.setAttribute("id", CurrentId);
+     buttonDelete.innerHTML = "-";
+     buttonDelete.addEventListener("click", DeleteModule);
+     // ------------
+     return [
+          tableRow,
+          moduleNameTd,
+          moduleNameInput,
+          noteTd,
+          noteInput,
+          coefficientTd,
+          coefficientInput,
+          buttonDelete,
+     ];
 };
-
+const appendChildrenFunction = (elements, firstOrLast) => {
+     let targetTable = "";
+     firstOrLast == "first"
+          ? (targetTable = ".tbody")
+          : (targetTable = ".tbody2");
+     const tbody = document.querySelector(targetTable);
+     tbody.appendChild(elements[0]);
+     elements[0].appendChild(elements[1]);
+     elements[1].appendChild(elements[2]);
+     elements[0].appendChild(elements[3]);
+     elements[3].appendChild(elements[4]);
+     elements[0].appendChild(elements[5]);
+     elements[5].appendChild(elements[6]);
+     elements[5].appendChild(elements[7]);
+};
 // add classes to all elements
-const addClassesFunction = (
-     tableRow,
-     td1,
-     td2,
-     td3,
-     input1,
-     input2,
-     input3
-) => {
-     // declaring all classes
+const addClassesFunction = (elements, firstOrLast) => {
+     let notesInputClasses = "";
+     let coefInputClasses = "";
+     let deleteButtonMayBeInFirstTable = "";
+     if (firstOrLast == "first") {
+          notesInputClasses =
+               "premiereNote w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0";
+          coefInputClasses =
+               "premiereCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0";
+          deleteButtonMayBeInFirstTable =
+               "first-table bg-white border-2 border-solid border-purple-500 text-purple-500 p-1 px-2 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-purple-500 hover:text-white text-lg leading-4";
+     } else {
+          notesInputClasses =
+               "deuxiemeNote w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0";
+          coefInputClasses =
+               "deuxiemeCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0";
+          deleteButtonMayBeInFirstTable =
+               "bg-white border-2 border-solid border-purple-500 text-purple-500 p-1 px-2 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-purple-500 hover:text-white text-lg leading-4";
+     }
      const classes = [
+          "",
           "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
-          "border-l-0 border-r-0",
-          "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
-          "premiereNote w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
-          "premiereCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
           "module w-5/6 border border-solid border-gray-600 text-lg font-bold text-gray-600 px-2 py-0",
-     ];
-
-     // add classes
-     td1.className = classes[0];
-     td2.className = classes[1];
-     td3.className = classes[2];
-     input1.className = classes[3];
-     input2.className = classes[4];
-     input3.className = classes[5];
-
-     // call to show elements function
-     appendChildrenFunction(tableRow, td1, td2, td3, input1, input2, input3);
-};
-// add classes to all elements
-const addClassesFunction2 = (
-     tableRow2,
-     td12,
-     td22,
-     td32,
-     input12,
-     input22,
-     input32
-) => {
-     // declaring all classes
-     const classes2 = [
-          "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
           "border-l-0 border-r-0",
+          notesInputClasses,
           "pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold",
-          "deuxiemeNote w-full border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
-          "deuxiemeCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0",
-          "module w-5/6 border border-solid border-gray-600 text-lg font-bold text-gray-600 px-2 py-0",
+          coefInputClasses,
+          deleteButtonMayBeInFirstTable,
      ];
-
      // add classes
-     td12.className = classes2[0];
-     td22.className = classes2[1];
-     td32.className = classes2[2];
-     input12.className = classes2[3];
-     input22.className = classes2[4];
-     input32.className = classes2[5];
-
+     for (let index = 0; index < elements.length; index++) {
+          elements[index].className = classes[index];
+     }
      // call to show elements function
-     appendChildrenFunction2(
-          tableRow2,
-          td12,
-          td22,
-          td32,
-          input12,
-          input22,
-          input32
-     );
+     appendChildrenFunction(elements, firstOrLast);
 };
 
 // create Module items function
-const CreateNewModule = () => {
-     // creating elements :
-     // the table row
-     const tableRow = document.createElement("tr");
-     // first td with children
-     const modulename = document.createElement("td");
-     const moduleInput = document.createElement("input");
-     moduleInput.setAttribute("type", "text");
-     moduleInput.setAttribute("placeHolder", "Module name");
-
-     // second td with children
-     const note = document.createElement("td");
-     const input = document.createElement("input");
-     input.setAttribute("type", "number");
-     input.setAttribute("id", ids);
-     input.setAttribute("min", 0);
-     input.setAttribute("max", 20);
-     input.setAttribute("value", 0);
-     input.setAttribute("oninput", "PreventStringValue(this)");
-
-     // third td with children
-     const coefficient = document.createElement("td");
-     const secondInput = document.createElement("input");
-     secondInput.setAttribute("type", "number");
-     secondInput.setAttribute("id", ids);
-     secondInput.setAttribute("min", 0);
-     secondInput.setAttribute("max", 9);
-     secondInput.setAttribute("value", 0);
-     secondInput.setAttribute("oninput", "PreventCoef(this)");
-
-     ids++;
-     addClassesFunction(
-          tableRow,
-          modulename,
-          note,
-          coefficient,
-          input,
-          secondInput,
-          moduleInput
-     );
-};
-
-// create Module2 items function
-const CreateNewModule2 = () => {
-     // the table row
-     const tableRow2 = document.createElement("tr");
-     // first td with children
-     const modulename2 = document.createElement("td");
-     const moduleInput2 = document.createElement("input");
-     moduleInput2.setAttribute("type", "text");
-     moduleInput2.setAttribute("placeHolder", "Module name");
-
-     // second td with children
-     const note2 = document.createElement("td");
-     const input2 = document.createElement("input");
-     input2.setAttribute("type", "number");
-     input2.setAttribute("id", ids2);
-     input2.setAttribute("min", 0);
-     input2.setAttribute("max", 20);
-     input2.setAttribute("value", 0);
-     input2.setAttribute("oninput", "PreventStringValue(this)");
-
-     // third td with children
-     const coefficient2 = document.createElement("td");
-     const secondInput2 = document.createElement("input");
-     secondInput2.setAttribute("type", "number");
-     secondInput2.setAttribute("id", ids2);
-     secondInput2.setAttribute("min", 0);
-     secondInput2.setAttribute("max", 9);
-     secondInput2.setAttribute("value", 0);
-     secondInput2.setAttribute("oninput", "PreventCoef(this)");
-
-     ids2++;
-     addClassesFunction2(
-          tableRow2,
-          modulename2,
-          note2,
-          coefficient2,
-          input2,
-          secondInput2,
-          moduleInput2
-     );
+const CreateNewModule = (currentButton) => {
+     let currentId = null;
+     if (currentButton == "first") {
+          currentId = ids;
+          ids++;
+     } else {
+          currentId = ids2;
+          ids2++;
+     }
+     const elements = CreateModuleConstant(currentId);
+     addClassesFunction(elements, currentButton);
 };
 
 // main function to calculate note in advanced.html==========================================================================================
 
-const calculateNote = function name() {
+const calculateNote = (firstOrLast) => {
      // declaring vars
-     const firstListNote = document.querySelectorAll(".premiereNote");
-     const firstListCoef = document.querySelectorAll(".premiereCoef");
-     let totalCoef = 1;
+     let currentNotesText = "";
+     let currentCoefText = "";
+     let totalCoef = 0;
      let totalNotes = 0;
+     if (firstOrLast == "first") {
+          currentNotesText = ".premiereNote";
+          currentCoefText = ".premiereCoef";
+     } else {
+          currentNotesText = ".deuxiemeNote";
+          currentCoefText = ".deuxiemeCoef";
+     }
+
+     let currentNotes = document.querySelectorAll(currentNotesText);
+     let currentCoef = document.querySelectorAll(currentCoefText);
 
      // calculating coefficient total by parcing every element
-     firstListCoef.forEach((element) => {
+     currentCoef.forEach((element) => {
           totalCoef += parseInt(element.value);
      });
 
      // calculating notes
-     firstListNote.forEach((element) => {
+     currentNotes.forEach((note) => {
           // if the coef input is the same as note input we do math
           let currentTotal = 0;
-          firstListCoef.forEach((current) => {
-               if (current.id == element.id) {
+          currentCoef.forEach((coef) => {
+               if (coef.id == note.id) {
                     currentTotal =
-                         parseFloat(current.value) * parseFloat(element.value);
+                         parseFloat(coef.value) * parseFloat(note.value);
                }
           });
           totalNotes += currentTotal;
 
           // showing the final note
           let finalNote = parseFloat(totalNotes) / parseFloat(totalCoef);
-          result[0].innerHTML = finalNote;
-          result[1].innerHTML = finalNote;
-     });
-};
-
-const calculateNote2 = () => {
-     // declaring vars
-     const secondListNote = document.querySelectorAll(".deuxiemeNote");
-     const secondListCoef = document.querySelectorAll(".deuxiemeCoef");
-     let totalCoef2 = 1;
-     let totalNotes2 = 0;
-
-     // calculating coefficient total by parcing every element
-     secondListCoef.forEach((element) => {
-          totalCoef2 += parseInt(element.value);
-     });
-
-     // calculating notes
-     secondListNote.forEach((element) => {
-          // if the coef input is the same as note input we do math
-          let currentTotal2 = 0;
-          secondListCoef.forEach((current) => {
-               if (current.id == element.id) {
-                    currentTotal2 =
-                         parseFloat(current.value) * parseFloat(element.value);
-               }
-          });
-          totalNotes2 += currentTotal2;
-
-          // showing the final note
-          let finalNote2 = parseFloat(totalNotes2) / parseFloat(totalCoef2);
-          result2[0].innerHTML = finalNote2;
-          result2[1].innerHTML = finalNote2;
+          let finalNoteAfterCheck = "";
+          if (forceFailure(currentNotes) == "failed") {
+               finalNoteAfterCheck = "Vous avec 0 sur un Module";
+          } else if (isNaN(finalNote)) {
+               finalNoteAfterCheck = "";
+          } else {
+               finalNoteAfterCheck = finalNote;
+          }
+          if (firstOrLast == "first") {
+               result[0].innerHTML = finalNoteAfterCheck;
+               result[1].innerHTML = finalNoteAfterCheck;
+          } else {
+               result2[0].innerHTML = finalNoteAfterCheck;
+               result2[1].innerHTML = finalNoteAfterCheck;
+          }
      });
 };
 
@@ -434,23 +388,14 @@ if (finalList != null || finalList != undefined) {
                     parseFloat(finalList[0].value) * 0.25 +
                     controles * 0.25;
                // affichage resultat
-               result2[2].innerHTML = moyenne + " /20";
-               // affichage decision (pas obligatoire)
-               if (moyenne < 10) {
-                    decision.innerHTML = "Doublon";
-               } else if (moyenne < 12) {
-                    decision.innerHTML = "Passable";
-               } else if (moyenne < 13) {
-                    decision.innerHTML = "Assez bien";
-               } else if (moyenne < 16) {
-                    decision.innerHTML = "bien";
+
+               if (forceFailure(finalList) == "failed") {
+                    result2[2].innerHTML = "";
+               } else {
+                    result2[2].innerHTML = moyenne + " /20";
                }
+               decision.innerHTML = decisionQuote(moyenne);
+               // affichage decision (pas obligatoire)
           });
      });
-}
-
-// button add click
-if (buttonAdd != null || buttonAdd2 != null) {
-     buttonAdd.addEventListener("click", CreateNewModule);
-     buttonAdd2.addEventListener("click", CreateNewModule2);
 }

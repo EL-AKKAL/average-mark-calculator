@@ -39,6 +39,7 @@
                                    </h3>
                                    <button
                                         id="add-module"
+                                        onclick="CreateNewModule('first')"
                                         class="bg-white border-2 border-solid border-purple-500 text-purple-500 p-1 px-3 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-purple-500 hover:text-white text-lg"
                                    >
                                         + module
@@ -71,7 +72,7 @@
                                         </tr>
                                    </thead>
                                    <tbody class="bg-gray-50 tbody">
-                                        <tr>
+                                        <tr id="1">
                                              <td
                                                   class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold"
                                              >
@@ -104,6 +105,13 @@
                                                        value=""
                                                        class="premiereCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0"
                                                   />
+                                                  <button
+                                                       onclick="DeleteModule(this)"
+                                                       id="1"
+                                                       class="first-table bg-white border-2 border-solid border-purple-500 text-purple-500 p-1 px-2 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-purple-500 hover:text-white text-lg leading-4"
+                                                  >
+                                                       -
+                                                  </button>
                                              </td>
                                         </tr>
                                    </tbody>
@@ -124,7 +132,15 @@
                                              </th>
                                              <th
                                                   class="pl-3 border-r-2 border-solid border-white py-3 text-left w-full"
-                                             ></th>
+                                             >
+                                                  <button
+                                                       onclick="calculateNote('first')"
+                                                       id="calculate"
+                                                       class="bg-purple-500 border-2 border-solid border-white text-white p-1 px-3 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-white hover:text-purple-500 text-lg"
+                                                  >
+                                                       Calculate
+                                                  </button>
+                                             </th>
                                         </tr>
                                    </tfoot>
                               </table>
@@ -133,7 +149,7 @@
 
                          <div class="rounded-t mb-0 px-4 py-3 border-0">
                               <hr
-                                   class="my-4 mx-auto h-1 bg-purple-400 w-8/12"
+                                   class="my-14 mx-auto h-1 bg-purple-400 w-8/12"
                               />
                               <div
                                    class="flex flex-wrap items-center justify-between"
@@ -143,6 +159,7 @@
                                    </h3>
                                    <button
                                         id="add-module2"
+                                        onclick="CreateNewModule('second')"
                                         class="bg-white border-2 border-solid border-purple-500 text-purple-500 p-1 px-3 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-purple-500 hover:text-white text-lg"
                                    >
                                         + module
@@ -175,7 +192,7 @@
                                         </tr>
                                    </thead>
                                    <tbody class="bg-gray-50 tbody2">
-                                        <tr>
+                                        <tr id="1">
                                              <td
                                                   class="pl-3 border-l-0 border-r-0 py-4 text-sm font-semibold"
                                              >
@@ -208,6 +225,13 @@
                                                        value=""
                                                        class="deuxiemeCoef !w-16 border border-solid border-gray-600 text-lg font-bold text-gray-600 p-0"
                                                   />
+                                                  <button
+                                                       id="1"
+                                                       onclick="DeleteModule(this)"
+                                                       class="bg-white border-2 border-solid border-purple-500 text-purple-500 p-1 px-2 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-purple-500 hover:text-white text-lg leading-4"
+                                                  >
+                                                       -
+                                                  </button>
                                              </td>
                                         </tr>
                                    </tbody>
@@ -228,7 +252,15 @@
                                              </th>
                                              <th
                                                   class="pl-3 border-r-2 border-solid border-white py-3 text-left w-full"
-                                             ></th>
+                                             >
+                                                  <button
+                                                       onclick="calculateNote('second')"
+                                                       id="calculate"
+                                                       class="bg-purple-500 border-2 border-solid border-white text-white p-1 px-3 ml-5 rounded-full !font-bold transition ease-in duration-75 hover:bg-white hover:text-purple-500 text-lg"
+                                                  >
+                                                       Calculate
+                                                  </button>
+                                             </th>
                                         </tr>
                                    </tfoot>
                               </table>
@@ -237,7 +269,7 @@
 
                          <div class="rounded-t mb-0 px-4 py-3 border-0">
                               <hr
-                                   class="my-4 mx-auto h-1 bg-purple-400 w-8/12"
+                                   class="my-14 mx-auto h-1 bg-purple-400 w-8/12"
                               />
                               <div
                                    class="flex flex-wrap items-center justify-between"
